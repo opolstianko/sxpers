@@ -43,11 +43,11 @@ async def get_segment(request):
 @app.route("/add_record", methods=['POST'])
 async def add_record(request):
 
-    ADMIN_USERNAME = os.environ('USERNAME')
-    ADMIN_PASS = os.environ('PASSWORD')
+    USERNAME = os.environ('USERNAME')
+    PASS = os.environ('PASSWORD')
 
     auth_token = request.token
-    auth_string = 'Basic ' + base64.b64encode(bytes('%s:%s' % (ADMIN_USERNAME, ADMIN_PASS), 'utf-8')).decode('utf-8')
+    auth_string = 'Basic ' + base64.b64encode(bytes('%s:%s' % (USERNAME, PASS), 'utf-8')).decode('utf-8')
 
     if not auth_token == auth_string:
         return ServerError('Not authorized', 403)
@@ -63,4 +63,6 @@ async def add_record(request):
     return text('OK')
 
 
-app.run(host="0.0.0.0", port=8080, debug=True)
+app.run(host="0.0.0.0", port=5000)
+
+

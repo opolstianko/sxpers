@@ -6,7 +6,7 @@ RUN apk add --no-cache --virtual build-dependencies libffi-dev make gcc python3-
 
 RUN apk add --no-cache openssl
 
-ADD . /app/app.py
+ADD . /app
 
 WORKDIR /app
 
