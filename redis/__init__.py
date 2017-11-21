@@ -1,6 +1,7 @@
 import aioredis
+import config as cfg
 
-REDIS_HOST = 'localhost'
+REDIS_HOST = cfg.REDIS_HOST 
 
 
 async def lookup_segment(mcmid):

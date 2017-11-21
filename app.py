@@ -8,6 +8,8 @@ from sanic.exceptions import ServerError
 from redis import lookup_segment, set_segment
 from utils import extract_mcmid
 
+import config as cfg
+
 app = Sanic(__name__)
 
 @app.route("/get_segment/img.png")
@@ -34,8 +36,8 @@ async def get_segment(request):
         return await file(dir_path + '/img.png')
 
     response = await file(dir_path + '/img.png')
-    response.cookies['pers'] = 'I am value!'
-    response.cookies['pers']['max-age'] = 3600
+    response.cookies[cfg.COOKIE_NAME] = 'I am value!'
+    response.cookies[cfg.COOKIE_NAME]['max-age'] = cfg.COOKIE_LIFETIME 
 
     return response
 
