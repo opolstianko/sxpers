@@ -45,8 +45,8 @@ async def get_segment(request):
 @app.route("/add_record", methods=['POST'])
 async def add_record(request):
 
-    USERNAME = os.environ('USERNAME')
-    PASS = os.environ('PASSWORD')
+    USERNAME = os.environ['USERNAME']
+    PASS = os.environ['PASSWORD']
 
     auth_token = request.token
     auth_string = 'Basic ' + base64.b64encode(bytes('%s:%s' % (USERNAME, PASS), 'utf-8')).decode('utf-8')
