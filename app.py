@@ -2,9 +2,11 @@ import os
 
 import base64
 from sanic import Sanic
-from sanic.response import file
 from sanic.response import text
+from sanic.response import json
 from sanic.exceptions import ServerError
+from sanic_cors import CORS, cross_origin
+
 from redis import lookup_segment, set_segment
 from utils import extract_mcmid
 
@@ -12,34 +14,26 @@ import config as cfg
 
 app = Sanic(__name__)
 
-@app.route("/get_segment/img.png")
+@app.route("/get_segment")
+@cross_origin(app)
 async def get_segment(request):
-    amcv_str = None
-    dir_path = os.path.dirname(os.path.realpath(__file__))
-
-    for cook_str in request.cookies:
-        if 'AMCV_' in cook_str:
-            amcv_str = request.cookies[cook_str]
-            break
+    amcv_str = request.args.get('amcv', default=None) 
 
     if not amcv_str:
-        return text('Not found')
+        return json({'karl_value': False})
 
     mcmid = extract_mcmid(amcv_str)
 
     if not mcmid:
-        return await file(dir_path + '/img.png')
+        return json({'karl_value': False})
 
     segment = await lookup_segment(mcmid)
 
     if not segment:
-        return await file(dir_path + '/img.png')
+        return json({'karl_value': False})
 
-    response = await file(dir_path + '/img.png')
-    response.cookies[cfg.COOKIE_NAME] = 'I am value!'
-    response.cookies[cfg.COOKIE_NAME]['max-age'] = cfg.COOKIE_LIFETIME 
 
-    return response
+    return json({'karl_value': segment}) 
 
 
 @app.route("/add_record", methods=['POST'])
